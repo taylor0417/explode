@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        li {
+            list-style: none;
+        }
+        .lunbo {
+            width: 560px;
+            height: 300px;
+            position: relative;
+            margin: 200px auto;
+            perspective: 500px;
+        }
+        .lunbo li {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+
+        }
+        .lunbo li.current {
+            display: block;
+        }
+        .btn {
+            position: absolute;
+            top: 50%;
+            bottom: 50%;
+            margin: auto;
+            display: block;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0,0,0,0.4);
+            color: white;
+            font-size: 30px;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+        .btnRight {
+            right: 0;
+        }
+        .maoni div {
+            position: absolute;
+            color: white;
+            transition: all 1s;
+        }
+    </style>
+</head>
+<body>
+    <div class="lunbo">
+        <div class="imglist">
+            <ul>
+                <li class="current"><img src="images/q1.jpg" alt=""></li>
+                <li><img src="images/q2.jpg" alt=""></li>
+                <li><img src="images/q3.jpg" alt=""></li>
+                <li><img src="images/q4.jpg" alt=""></li>
+            </ul>
+        </div>
+        <div class="maoni"></div>
+        <span class="btn btnLeft">&lt;</span>
+        <span class="btn btnRight">&gt;</span>
+    </div>
+    <script src="js/jquery.js"></script>
+    <script>
+        var $lis = $('ul li');
+        var $imgs = $('ul li img');
+        var $right = $('.btnRight');
+        var $maoni = $('.maoni');
+        var idx = 0;
+        var flag = true;
+        $right.click(function(){
+            if(!flag) return;
+            flag=false;
+            for(var row = 0; row < 6; row++){
+                for(var col = 0; col < 10; col++){
+                    $('<div></div>').css({
+                        "width": 56,
+                        "height": 50,
+                        "left": col * 56,
+                        "top": row * 50,
+                        "background-image":"url("+$imgs.eq(idx).attr('src')+")",
+                        "background-position": (-col * 56) + "px " + (-row *50) + "px"
+                    }).appendTo($maoni)
+                }
+            }
+            setTimeout(function(){
+                $maoni.find('div').each(function(){
+                    $(this).css({
+                        "transform":"rotateX("+(Math.random()*360-180)+"deg) rotateY("+(Math.random()*360-180)+"deg) translateZ(1000px)",
+                        "opacity":0
+                    })
+                })
+            },1)
+            idx++;
+            if(idx > $imgs.length - 1){
+                idx = 0;
+            }
+            $lis.eq(idx).addClass('current').siblings().removeClass('current')
+            setTimeout(function(){
+                $maoni.html("");
+                flag = true;
+            },1100)
+        })
+    </script>
+</body>
+</html>
